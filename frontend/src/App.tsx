@@ -11,10 +11,15 @@ interface Response {
     statusText: string;
 }
 
+interface User {
+    username: string;
+}
+
 function App() {
     const [csrf, setCsrf] = useState("");
     const [error, setError] = useState("");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState<User>({ username: "" });
 
     useEffect(() => {
         getSession();
@@ -44,6 +49,7 @@ function App() {
             .then((data) => {
                 console.log(data);
                 setIsAuthenticated(true);
+                whoami();
             })
             .catch((err) => {
                 console.log(err);
@@ -86,6 +92,13 @@ function App() {
             .catch((err) => console.log(err));
     };
 
+    const whoami = () => {
+        axios
+            .get("/api/whoami", { withCredentials: true })
+            .then((res) => setUser({ username: res.data.username }))
+            .catch((err) => console.log(err));
+    };
+
     const isResponseOk = (response: Response) => {
         if (response.status >= 200 && response.status <= 299) {
             return response;
@@ -97,10 +110,13 @@ function App() {
     if (isAuthenticated) {
         return (
             <div>
-                You are logged in!{" "}
+                Welcome {user.username}.You are logged in!{" "}
                 <div>
                     <button className="btn btn-danger" onClick={logout}>
                         Logout
+                    </button>
+                    <button className="btn btn-danger" onClick={whoami}>
+                        Who Am I
                     </button>
                 </div>
             </div>
