@@ -11,6 +11,7 @@ import {
     selectCount,
 } from "./counterSlice";
 import styles from "./Counter.module.css";
+import { logoutAsync } from "../auth/authSlice";
 
 export function Counter() {
     const count = useAppSelector(selectCount);
@@ -70,6 +71,7 @@ export function Counter() {
                     Add If Odd
                 </button>
             </div>
+            <button onClick={() => dispatch(logoutAsync())}>Logout</button>
         </div>
     );
 }

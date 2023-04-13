@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -14,6 +15,29 @@ def get_csrf(request):
 
 
 @require_POST
+def register_view(request):
+    data = json.loads(request.body)
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    if username is None or password is None or email is None:
+        return JsonResponse({'detail': 'Please provide all required fields'}, status=400)
+
+    user = authenticate(username=username, password=password)
+
+    if user is not None:
+        return JsonResponse({'detail': 'User already exists.'})
+
+    user = User.objects.create_user(username, email, password)
+
+    # user.last_name = "Some name"
+
+    user.save()
+
+    return JsonResponse({'detail': 'User was registered!'})
+
+
 def login_view(request):
     data = json.loads(request.body)
     username = data.get('username')

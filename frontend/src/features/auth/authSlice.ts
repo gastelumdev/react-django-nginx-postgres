@@ -1,9 +1,20 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
-import { getSession, getCSRF, login, logout } from './authAPI';
+import { getSession, getCSRF, login, logout, register } from './authAPI';
 
+interface login {
+    csrf: string;
+    username: string;
+    password: string;
+}
 
+interface User {
+    csrf: string;
+    username: string;
+    email: string;
+    password: string;
+}
 
 export interface AuthState {
     isAuthenticated: boolean;
@@ -12,9 +23,9 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-    isAuthenticated: false,
+    isAuthenticated: true,
     csrf: "",
-    status: 'idle',
+    status: 'loading',
 }
 
 export const getSessionAsync = createAsyncThunk(
@@ -22,14 +33,17 @@ export const getSessionAsync = createAsyncThunk(
     async () => {
         const response = await getSession();
         
-        if (!response.data.isAuthenticated) {
-            const csrfResponse = await getCSRF();
+        if (response.data.isAuthenticated) {
             return {isAuthenticated: response.data.isAuthenticated,
-            csrf: csrfResponse.headers['x-csrftoken']}
+                csrf: ""}
         }
-
-        return {isAuthenticated: response.data.isAuthenticated,
-        csrf: ""}
+        else {
+            const csrfResponse = await getCSRF();
+            return {
+                isAuthenticated: response.data.isAuthenticated,
+                csrf: csrfResponse.headers['x-csrftoken']
+            }
+        }
     }
 )
 
@@ -44,8 +58,8 @@ export const setCSRFAsync = createAsyncThunk(
 
 export const loginAsync = createAsyncThunk(
     'auth/login',
-    async (csrf: string) => {
-        const response = await login(csrf);
+    async ({csrf, username, password}: login) => {
+        const response = await login({csrf, username, password});
         console.log(response.data)
         return response.data;
     }
@@ -58,6 +72,15 @@ export const logoutAsync = createAsyncThunk(
         const csrfResponse = await getCSRF();
 
         return csrfResponse.headers['x-csrftoken'];
+    }
+)
+
+export const registerAsync = createAsyncThunk(
+    'auth/register',
+    async ({csrf, username, email, password}: User) => {
+        const response = await register({csrf, username, email, password});
+        console.log(response.data);
+        return response.data;
     }
 )
 
@@ -109,10 +132,20 @@ export const loginSlice = createSlice({
         .addCase(logoutAsync.rejected, (state) => {
             state.status = 'failed';
         })
+        .addCase(registerAsync.pending, (state) => {
+            state.status = 'loading';
+        })
+        .addCase(registerAsync.fulfilled, (state, action) => {
+            state.status = 'idle';
+        })
+        .addCase(registerAsync.rejected, (state) => {
+            state.status = 'failed';
+        })
     }
 });
 
 export const selectSession = (state: RootState) => state.auth.isAuthenticated;
 export const selectCSRF = (state: RootState) => state.auth.csrf;
+export const selectStatus = (state: RootState) => state.auth.status;
 
 export default loginSlice.reducer;
