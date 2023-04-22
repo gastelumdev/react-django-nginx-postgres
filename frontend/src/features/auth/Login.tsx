@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import {
     getSessionAsync,
@@ -8,6 +8,22 @@ import {
     selectSession,
     setCSRFAsync,
 } from "./authSlice";
+
+import {
+    Flex,
+    Box,
+    FormControl,
+    FormLabel,
+    Input,
+    Checkbox,
+    Stack,
+    Button,
+    Heading,
+    Text,
+    useColorModeValue,
+    ChakraProvider,
+} from "@chakra-ui/react";
+import chakraTheme from "@chakra-ui/theme";
 
 export function Login() {
     const isAuthenticated = useAppSelector(selectSession);
@@ -40,97 +56,73 @@ export function Login() {
     }
 
     return (
-        <main className="d-flex w-100">
-            <div className="container d-flex flex-column">
-                <div className="row vh-100">
-                    <div className="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
-                        <div className="d-table-cell align-middle">
-                            <div className="text-center mt-4">
-                                <p className="lead">
-                                    Sign in to your account to continue
-                                </p>
-                            </div>
-                            <div className="card">
-                                <div className="card-body">
-                                    <div className="m-sm-4">
-                                        <div className="text-center">
-                                            {/* <img
-                                                src="img/avatars/avatar.jpg"
-                                                alt="Charles Hall"
-                                                className="img-fluid rounded-circle"
-                                                width={132}
-                                                height={132}
-                                            /> */}
-                                        </div>
-                                        <form onSubmit={handleSubmit}>
-                                            <div className="mb-3">
-                                                <label className="form-label">
-                                                    Username
-                                                </label>
-                                                <input
-                                                    className="form-control form-control-lg"
-                                                    type="text"
-                                                    name="username"
-                                                    placeholder="Enter your username"
-                                                    value={username}
-                                                    onChange={handleUsername}
-                                                />
-                                            </div>
-                                            <div className="mb-3">
-                                                <label className="form-label">
-                                                    Password
-                                                </label>
-                                                <input
-                                                    className="form-control form-control-lg"
-                                                    type="password"
-                                                    name="password"
-                                                    placeholder="Enter your password"
-                                                    value={password}
-                                                    onChange={handlePassword}
-                                                />
-                                                <small>
-                                                    <a href="index.html">
-                                                        Forgot password?
-                                                    </a>
-                                                </small>
-                                            </div>
-
-                                            <div className="text-center mt-3">
-                                                {/* <a
-                                                    href="index.html"
-                                                    className="btn btn-lg btn-primary"
-                                                >
-                                                    Sign in
-                                                </a> */}
-                                                <button
-                                                    type="submit"
-                                                    className="btn btn-lg btn-primary"
-                                                >
-                                                    Sign in
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        // <div>
-        //     {isAuthenticated && <Navigate to="/" replace />}
-        //     {/* <button onClick={() => dispatch(loginAsync(csrf))}>Login</button> */}
-        //     <form onSubmit={handleSubmit}>
-        //         <input type="text" value={username} onChange={handleUsername} />
-        //         <input
-        //             type="password"
-        //             value={password}
-        //             onChange={handlePassword}
-        //         />
-        //         <input type="submit" value="Login" />
-        //     </form>
-        // </div>
+        <ChakraProvider>
+            <Flex
+                minH={"100vh"}
+                align={"center"}
+                justify={"center"}
+                bg={useColorModeValue("gray.50", "gray.800")}
+            >
+                <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+                    <Stack align={"center"}>
+                        <Heading fontSize={"4xl"}>
+                            Sign in to your account
+                        </Heading>
+                        <Text fontSize={"lg"} color={"gray.600"}>
+                            to enjoy all of our cool{" "}
+                            <Link to="/">features</Link> ✌️
+                        </Text>
+                    </Stack>
+                    <Box
+                        rounded={"lg"}
+                        bg={useColorModeValue("white", "gray.700")}
+                        boxShadow={"lg"}
+                        p={8}
+                    >
+                        <Stack spacing={4}>
+                            <FormControl id="username">
+                                <FormLabel>Username</FormLabel>
+                                <Input type="text" onChange={handleUsername} />
+                            </FormControl>
+                            <FormControl id="password">
+                                <FormLabel>Password</FormLabel>
+                                <Input
+                                    type="password"
+                                    onChange={handlePassword}
+                                />
+                            </FormControl>
+                            <Stack spacing={10}>
+                                {/* <Stack
+                                    direction={{ base: "column", sm: "row" }}
+                                    align={"start"}
+                                    justify={"space-between"}
+                                >
+                                    <Checkbox>Remember me</Checkbox>
+                                    <Link color={"blue.400"}>
+                                        Forgot password?
+                                    </Link>
+                                </Stack> */}
+                                <Button
+                                    bg={"blue.400"}
+                                    color={"white"}
+                                    _hover={{
+                                        bg: "blue.500",
+                                    }}
+                                    onClick={handleSubmit}
+                                >
+                                    Sign in
+                                </Button>
+                                <Stack pt={6}>
+                                    <Text align={"center"}>
+                                        Need to signup?{" "}
+                                        <Link to="/register">Register</Link>
+                                    </Text>
+                                </Stack>
+                            </Stack>
+                        </Stack>
+                    </Box>
+                </Stack>
+            </Flex>
+        </ChakraProvider>
     );
 }
