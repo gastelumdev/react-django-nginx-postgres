@@ -20,9 +20,17 @@ interface CardProps {
     description: string;
     icon: ReactElement;
     setCard(id: number): void;
+    deleteEvent(id: number): void;
 }
 
-const Card = ({ id, heading, description, icon, setCard }: CardProps) => {
+const Card = ({
+    id,
+    heading,
+    description,
+    icon,
+    setCard,
+    deleteEvent,
+}: CardProps) => {
     return (
         <Box
             maxW={{ base: "full", md: "275px" }}
@@ -62,6 +70,13 @@ const Card = ({ id, heading, description, icon, setCard }: CardProps) => {
                 >
                     View event
                 </Link>
+                <button
+                    onClick={() => {
+                        deleteEvent(id);
+                    }}
+                >
+                    Delete
+                </button>
             </Stack>
         </Box>
     );
@@ -72,6 +87,7 @@ interface CardWrapperProps {
     instruction: string;
     events: Array<TEvent>;
     setCard(id: number): void;
+    deleteEvent(id: number): void;
 }
 
 export default function CardWrapper({
@@ -79,6 +95,7 @@ export default function CardWrapper({
     instruction,
     events,
     setCard,
+    deleteEvent,
 }: CardWrapperProps) {
     return (
         <Box p={4}>
@@ -105,6 +122,7 @@ export default function CardWrapper({
                                 description={event.overview}
                                 setCard={setCard}
                                 id={event.id}
+                                deleteEvent={deleteEvent}
                             />
                         );
                     })}

@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework import permissions
 from .models import Event
 from .serializers import EventSerializer
+from django.views.decorators.csrf import csrf_exempt
 
 
 class EventListApiView(APIView):
@@ -59,6 +60,7 @@ class EventDetailApiView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @csrf_exempt
     def delete(self, request, pk, format=None):
         event = self.get_object(pk, request.user.id)
         event.delete()

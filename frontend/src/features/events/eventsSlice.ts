@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
-import { createEvent, getEvents } from './eventsAPI';
+import { createEvent, deleteEvent, getEvents } from './eventsAPI';
 
 export interface TEvent {
     id: number;
@@ -38,7 +38,15 @@ export const createEventAsync = createAsyncThunk(
         const response = await createEvent();
         return response.data;
     }
-) 
+)
+
+export const deleteEventAsync = createAsyncThunk(
+    'events/deleteEvent',
+    async (eventId: number) => {
+        const response = await deleteEvent(eventId);
+        return response.data;
+    }
+)
 
 export const eventSlice = createSlice({
     name: 'events',
@@ -67,6 +75,15 @@ export const eventSlice = createSlice({
             state.status = 'idle';
         })
         .addCase(createEventAsync.rejected, (state) => {
+            state.status = 'failed'
+        })
+        .addCase(deleteEventAsync.pending, (state) => {
+            state.status = 'loading';
+        })
+        .addCase(deleteEventAsync.fulfilled, (state, action) => {
+            state.status = 'idle';
+        })
+        .addCase(deleteEventAsync.rejected, (state) => {
             state.status = 'failed'
         })
     }

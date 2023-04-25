@@ -9,6 +9,7 @@ import {
     TEvent,
     setEventId,
     selectEventId,
+    deleteEventAsync,
 } from "./eventsSlice";
 import NavBar from "../../components/NavBar";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -32,6 +33,9 @@ const Events = () => {
         dispatch(setEventId(eventId));
         localStorage.setItem("lsEventId", JSON.stringify(eventId));
     };
+    const handleDeleteEvent = (eventId: number) => {
+        dispatch(deleteEventAsync(eventId));
+    };
     return (
         <ChakraProvider>
             <NavBar logout={handleLogout} />
@@ -40,6 +44,7 @@ const Events = () => {
                 instruction="Start by creating an event or select one below."
                 events={events}
                 setCard={handleSetEventId}
+                deleteEvent={handleDeleteEvent}
             />
         </ChakraProvider>
     );

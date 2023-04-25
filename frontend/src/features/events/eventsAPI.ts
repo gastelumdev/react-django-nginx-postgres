@@ -25,10 +25,26 @@ export const createEvent = () => {
     });
 }
 
+export const deleteEvent = (eventId: number) => {
+    return axios.delete('/api/events/' + eventId, { withCredentials: true });
+}
+
 // {
 //     "user": {
 //         "id": 1
 //     },
+//     "title": "Event 1",
+//     "overview": "Some event overview",
+//     "date": "2013-01-29",
+//     "street": "A Street",
+//     "city": "City",
+//     "state": "state",
+//     "country": "country",
+//     "zipcode": "zipcode"
+// }
+
+// {
+//     "owner": 1,
 //     "title": "Event 1",
 //     "overview": "Some event overview",
 //     "date": "2013-01-29",
