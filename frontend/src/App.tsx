@@ -43,9 +43,11 @@ function App() {
     // const eventId = useAppSelector(selectEventId);
     const dispatch = useAppDispatch();
     const isAuthenticated = useAppSelector(selectSession);
+    console.log("App:", isAuthenticated);
 
     useEffect(() => {
         dispatch(getSessionAsync());
+        // window.location.reload();
     }, [dispatch]);
 
     // useEffect(() => {
@@ -69,8 +71,8 @@ function App() {
 
     // console.log(isAuthenticated);
 
-    // if (isAuthenticated) {
-    //     return <button onClick={() => logout()}>Logout</button>;
+    // if (!isAuthenticated) {
+    //     window.location.reload();
     // }
 
     return (

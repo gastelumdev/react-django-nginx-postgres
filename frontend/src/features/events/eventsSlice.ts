@@ -43,8 +43,9 @@ export const createEventAsync = createAsyncThunk(
 export const deleteEventAsync = createAsyncThunk(
     'events/deleteEvent',
     async (eventId: number) => {
-        const response = await deleteEvent(eventId);
-        return response.data;
+        const deleteResponse = await deleteEvent(eventId);
+        const eventsResponse = await getEvents();
+        return eventsResponse.data;
     }
 )
 
@@ -82,6 +83,7 @@ export const eventSlice = createSlice({
         })
         .addCase(deleteEventAsync.fulfilled, (state, action) => {
             state.status = 'idle';
+            state.events = action.payload;
         })
         .addCase(deleteEventAsync.rejected, (state) => {
             state.status = 'failed'

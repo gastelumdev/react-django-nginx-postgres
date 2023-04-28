@@ -3,7 +3,9 @@ import { useAppSelector } from "../../app/hooks";
 import { selectAccessToken } from "../auth/authSlice";
 
 export const getEvents = () => {
-    return axios.get("/api/events/");
+    return axios.get("/api/events/", {
+        headers: {"Content-Type": "application/json", "Authorization": "JWT " + getToken()}
+    });
 }
 
 export const createEvent = () => {
@@ -30,7 +32,11 @@ export const deleteEvent = (eventId: number) => {
 }
 
 const getToken = () => {
-    return useAppSelector(selectAccessToken);
+    return localStorage.getItem('token')
+}
+
+const getRefreshToken = () => {
+    return localStorage.getItem('refreshToken')
 }
 
 // {

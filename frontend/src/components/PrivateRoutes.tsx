@@ -15,14 +15,14 @@ const PrivateRoutes = () => {
     const status = useAppSelector(selectStatus);
     const isAuthenticated = useAppSelector(selectSession);
     const userId = localStorage.getItem("userId");
-    console.log("PrivateRoute: ", userId);
+    console.log("PrivateRoute: ", isAuthenticated);
 
     if (status === "loading") {
         console.log("Spinning!");
         return null;
     }
 
-    if (isAuthenticated) {
+    if (isAuthenticated || localStorage.getItem("token") !== "") {
         console.log("Private route allows access");
         return <Outlet />;
     } else {

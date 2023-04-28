@@ -69,10 +69,11 @@ export const signinAsync = createAsyncThunk(
 export const getSessionAsync = createAsyncThunk(
     'auth/getSession',
     async ({}, thunkAPI) => {
+        
         try {
             const response = await getSession();
-        if (response.status == 200) return true;
-        return false;
+            if (response.status == 200) return true;
+            return false;
         } catch (err) {
             const errors = err as Error | AxiosError;
             return thunkAPI.rejectWithValue({error: errors.message});
@@ -88,6 +89,7 @@ export const logoutAsync = createAsyncThunk(
             const response = await refreshToken();
             localStorage.setItem("refreshToken", "");
             localStorage.setItem("token", "");
+            localStorage.setItem("userId", "");
         } catch (err) {
             const errors = err as Error | AxiosError;
             return thunkAPI.rejectWithValue({error: errors.message});
@@ -117,11 +119,12 @@ export const loginSlice = createSlice({
         })
         .addCase(getSessionAsync.fulfilled, (state, action) => {
             state.status = 'idle';
-            state.isAuthenticated = action.payload;
+            state.isAuthenticated = true;
             // state.csrf = action.payload?.csrf;
         })
         .addCase(getSessionAsync.rejected, (state) => {
             state.status = 'failed';
+            state.isAuthenticated = false;
         })
         .addCase(logoutAsync.pending, (state) => {
             state.status = 'loading';
@@ -133,6 +136,9 @@ export const loginSlice = createSlice({
         .addCase(logoutAsync.rejected, (state) => {
             state.status = 'failed';
             state.isAuthenticated = false;
+            localStorage.setItem("refreshToken", "");
+            localStorage.setItem("token", "");
+            localStorage.setItem("userId", "");
         })
         .addCase(registerAsync.pending, (state) => {
             state.status = 'loading';
