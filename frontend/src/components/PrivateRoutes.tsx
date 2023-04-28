@@ -1,25 +1,35 @@
 import { AsyncThunkAction } from "@reduxjs/toolkit";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { Dispatch, AnyAction } from "redux";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
 import {
-    getSessionAsync,
+    // getSessionAsync,
     selectSession,
     selectStatus,
+    selectUser,
 } from "../features/auth/authSlice";
 
 const PrivateRoutes = () => {
-    const isAuthenticated = useAppSelector(selectSession);
+    // const isAuthenticated = false;
     const status = useAppSelector(selectStatus);
-    console.log("PrivateRoute: ", isAuthenticated);
+    const isAuthenticated = useAppSelector(selectSession);
+    const userId = localStorage.getItem("userId");
+    console.log("PrivateRoute: ", userId);
 
     if (status === "loading") {
         console.log("Spinning!");
         return null;
     }
 
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login/" replace />;
+    if (isAuthenticated) {
+        console.log("Private route allows access");
+        return <Outlet />;
+    } else {
+        console.log("Private route redirects to login");
+        return <Navigate to="/login/" replace />;
+    }
+    // return user != null ? <Outlet /> : <Navigate to="/login/" replace />;
 };
 
 export default PrivateRoutes;

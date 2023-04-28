@@ -2,7 +2,7 @@ import { AsyncThunkAction } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
 import { Dispatch, AnyAction } from "redux";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { logoutAsync } from "../auth/authSlice";
+import { signinAsync, logout, logoutAsync } from "../auth/authSlice";
 import {
     getEventsAsync,
     selectEvents,
@@ -35,6 +35,12 @@ const Events = () => {
     };
     const handleDeleteEvent = (eventId: number) => {
         dispatch(deleteEventAsync(eventId));
+    };
+
+    const signin = () => {
+        dispatch(
+            signinAsync({ username: "ogcollabtime", password: "Coll@b#2023" })
+        );
     };
     return (
         <ChakraProvider>

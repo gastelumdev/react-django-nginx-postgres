@@ -10,11 +10,16 @@ import { Login } from "./features/auth/Login";
 
 import {
     getSessionAsync,
-    loginAsync,
+    // logout,
     logoutAsync,
+    // getSessionAsync,
+    // loginAsync,
+    // logoutAsync,
     selectCSRF,
     selectSession,
-    setCSRFAsync,
+    setSession,
+    // setCSRFAsync,
+    signinAsync,
 } from "./features/auth/authSlice";
 import Register from "./features/auth/Register";
 import Events from "./features/events/Events";
@@ -35,22 +40,38 @@ interface User {
 }
 
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(
-        useAppSelector(selectSession)
-    );
+    // const eventId = useAppSelector(selectEventId);
     const dispatch = useAppDispatch();
-    const eventId = useAppSelector(selectEventId);
+    const isAuthenticated = useAppSelector(selectSession);
 
     useEffect(() => {
         dispatch(getSessionAsync());
     }, [dispatch]);
 
-    useEffect(() => {
-        dispatch(getEventsAsync());
-        console.log("We fetched EventAsync");
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(getEventsAsync());
+    //     console.log("We fetched EventAsync");
+    // }, [dispatch]);
 
-    console.log("App: ", isAuthenticated);
+    // const signin = () => {
+    //     dispatch(
+    //         signinAsync({ username: "ogcollabtime", password: "Coll@b#2023" })
+    //     );
+    // };
+
+    // const getSession = () => {
+    //     dispatch(getSessionAsync());
+    // };
+
+    // const logout = () => {
+    //     dispatch(logoutAsync());
+    // };
+
+    // console.log(isAuthenticated);
+
+    // if (isAuthenticated) {
+    //     return <button onClick={() => logout()}>Logout</button>;
+    // }
 
     return (
         <Router>
@@ -63,6 +84,10 @@ function App() {
                 <Route path="/register" element={<Register />} />
             </Routes>
         </Router>
+        // <>
+        //     <button onClick={() => signin()}>Signin</button>
+        //     <button onClick={() => getSession()}>Get Session</button>
+        // </>
     );
 }
 

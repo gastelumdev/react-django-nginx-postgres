@@ -64,7 +64,7 @@ const Register = () => {
     const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
 
-        dispatch(registerAsync({ csrf, username, email, password }));
+        dispatch(registerAsync({ username, email, password }));
     };
 
     return isAuthenticated ? (

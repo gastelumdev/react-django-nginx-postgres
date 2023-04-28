@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import {
-    getSessionAsync,
-    loginAsync,
+    // getSessionAsync,
+    // loginAsync,
     selectCSRF,
     selectSession,
-    setCSRFAsync,
+    signinAsync,
+    // setCSRFAsync,
 } from "./authSlice";
 
 import {
@@ -48,7 +49,7 @@ export function Login() {
     const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
 
-        dispatch(loginAsync({ csrf, username, password }));
+        dispatch(signinAsync({ username, password }));
     };
 
     if (isAuthenticated) {

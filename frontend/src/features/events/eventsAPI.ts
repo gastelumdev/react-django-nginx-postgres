@@ -1,4 +1,6 @@
 import axios from "axios"
+import { useAppSelector } from "../../app/hooks";
+import { selectAccessToken } from "../auth/authSlice";
 
 export const getEvents = () => {
     return axios.get("/api/events/");
@@ -19,14 +21,16 @@ export const createEvent = () => {
         zipcode: "zipcode"
     },
     {
-        headers: {
-            "Content-Type": "application/json"
-        }
+        headers: {"Content-Type": "application/json", "Authorization": "JWT " + getToken()}
     });
 }
 
 export const deleteEvent = (eventId: number) => {
-    return axios.delete('/api/events/' + eventId, { withCredentials: true });
+    return axios.delete('/api/events/' + eventId, {headers: {"Content-Type": "application/json", "Authorization": "JWT " + getToken()}});
+}
+
+const getToken = () => {
+    return useAppSelector(selectAccessToken);
 }
 
 // {

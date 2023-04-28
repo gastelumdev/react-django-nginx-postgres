@@ -1,13 +1,11 @@
 import uuid
 from django.db import models
-
-from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Event(models.Model):
     owner = models.ForeignKey(
-        User, related_name='events', on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, related_name='events', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True, default=uuid.uuid1)
     overview = models.TextField()
@@ -25,7 +23,7 @@ class Event(models.Model):
 
 class Participant(models.Model):
     organizer = models.ForeignKey(
-        User, related_name='participants', on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, related_name='participants', on_delete=models.CASCADE)
     event = models.ManyToManyField(Event, related_name='events')
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
