@@ -15,6 +15,7 @@ import {
 import { useAppSelector } from "../app/hooks";
 import { selectEventId } from "../features/events/eventsSlice";
 import DataTable from "react-data-table-component";
+import { useParams } from "react-router-dom";
 
 const columns = [
     {
@@ -44,6 +45,7 @@ const data = [
 
 const Dashboard = () => {
     // const eventId = useAppSelector(selectEventId);
+    const params = useParams();
     const [eventId, setEventId] = useState(() => {
         const saved = localStorage.getItem("lsEventId") || "";
         const inittialValue = JSON.parse(saved);
@@ -52,7 +54,7 @@ const Dashboard = () => {
     return (
         <ChakraProvider>
             <DashboardNav>
-                {/* <h1>{eventId}</h1> */}
+                <h1>{params.id}</h1>
                 <Box
                     // maxW={{ base: "full", md: "275px" }}
                     bg="white"

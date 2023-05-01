@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
-import { createEvent, deleteEvent, getEvents } from './eventsAPI';
+import { createEvent, deleteEvent, editEvent, getEvents } from './eventsAPI';
 
 export interface TEvent {
     id: number;
@@ -11,14 +11,22 @@ export interface TEvent {
     date: Date;
 }
 
+export interface CreatedEvent {
+    title: string;
+    overview: string;
+    date: Date;
+}
+
 export interface EventState {
     eventId: number;
+    event: TEvent | {id: 0};
     events: Array<TEvent>;
     status: 'idle' | 'loading' | 'failed';
 }
 
 const initialState: EventState = {
     eventId: 0,
+    event: {id: 0},
     events: [],
     status: 'loading',
 }
@@ -27,15 +35,24 @@ export const getEventsAsync = createAsyncThunk(
     'events/getEvents',
     async () => {
         const response = await getEvents();
-        console.log(response.data);
         return response.data;
     }
 )
 
 export const createEventAsync = createAsyncThunk(
     'events/createEvent',
-    async () => {
-        const response = await createEvent();
+    async (data: CreatedEvent) => {
+        console.log(data)
+        const response = await createEvent(data);
+        return response.data;
+    }
+)
+
+export const editEventAsync = createAsyncThunk(
+    'events/editEvent',
+    async (data: TEvent) => {
+        console.log(data);
+        const response = await editEvent(data);
         return response.data;
     }
 )
@@ -74,6 +91,8 @@ export const eventSlice = createSlice({
         })
         .addCase(createEventAsync.fulfilled, (state, action) => {
             state.status = 'idle';
+            state.event = action.payload;
+            state.eventId = action.payload.id;
         })
         .addCase(createEventAsync.rejected, (state) => {
             state.status = 'failed'
@@ -93,6 +112,7 @@ export const eventSlice = createSlice({
 
 export const selectEvents = (state: RootState) => state.events.events;
 export const selectEventId = (state: RootState) => state.events.eventId;
+export const selectEvent = (state: RootState) => state.events.event;
 const {actions, reducer} = eventSlice;
 export const {setEventId} = actions;
 

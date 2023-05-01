@@ -22,6 +22,7 @@ export interface AuthState {
     accessToken: string;
     refreshToken: string;
     user: User | null;
+    error: boolean | null;
 }
 
 const initialState: AuthState = {
@@ -31,6 +32,7 @@ const initialState: AuthState = {
     accessToken: "",
     refreshToken: "",
     user: null,
+    error: false,
 }
 
 export const registerAsync = createAsyncThunk(
@@ -69,15 +71,17 @@ export const signinAsync = createAsyncThunk(
 export const getSessionAsync = createAsyncThunk(
     'auth/getSession',
     async ({}, thunkAPI) => {
-        
-        try {
-            const response = await getSession();
-            if (response.status == 200) return true;
-            return false;
-        } catch (err) {
-            const errors = err as Error | AxiosError;
-            return thunkAPI.rejectWithValue({error: errors.message});
-        }
+        const response = await getSession();
+        if (response.status == 200) return true;
+        return false;
+        // try {
+        //     const response = await getSession();
+        //     if (response.status == 200) return true;
+        //     return false;
+        // } catch (err) {
+        //     const errors = err as Error | AxiosError;
+        //     return thunkAPI.rejectWithValue({error: errors.message});
+        // }
         
     }
 )
@@ -120,11 +124,14 @@ export const loginSlice = createSlice({
         .addCase(getSessionAsync.fulfilled, (state, action) => {
             state.status = 'idle';
             state.isAuthenticated = true;
+            state.error = action.payload ? false : true;
             // state.csrf = action.payload?.csrf;
         })
         .addCase(getSessionAsync.rejected, (state) => {
             state.status = 'failed';
             state.isAuthenticated = false;
+            // state.errorMessage = action.error;
+            // state.error = true
         })
         .addCase(logoutAsync.pending, (state) => {
             state.status = 'loading';
@@ -161,6 +168,8 @@ export const loginSlice = createSlice({
             if (localStorage.getItem('token') !== "") {
                 state.isAuthenticated = true
             }
+
+            // state.error = null;
         })
         .addCase(signinAsync.rejected, (state) => {
             state.status = 'failed';
@@ -176,5 +185,6 @@ export const selectStatus = (state: RootState) => state.auth.status;
 export const selectAccessToken = (state: RootState) => state.auth.accessToken;
 export const selectRefreshToken = (state: RootState) => state.auth.refreshToken;
 export const selectUser = (state: RootState) => state.auth.user;
+export const selectError = (state: RootState) => state.auth.error;
 
 export default loginSlice.reducer;

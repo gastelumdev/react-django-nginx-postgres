@@ -43,7 +43,6 @@ function App() {
     // const eventId = useAppSelector(selectEventId);
     const dispatch = useAppDispatch();
     const isAuthenticated = useAppSelector(selectSession);
-    console.log("App:", isAuthenticated);
 
     useEffect(() => {
         dispatch(getSessionAsync());

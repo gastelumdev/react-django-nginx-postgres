@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useAppSelector } from "../../app/hooks";
 import { selectAccessToken } from "../auth/authSlice";
+import { CreatedEvent, TEvent } from "./eventsSlice";
 
 export const getEvents = () => {
     return axios.get("/api/events/", {
@@ -8,20 +9,8 @@ export const getEvents = () => {
     });
 }
 
-export const createEvent = () => {
-    return axios.post("/api/events/", {
-        user: {
-            id: 1
-        },
-        title: "Event 1",
-        overview: "Some event overview",
-        date: "2013-01-29",
-        street: "A Street",
-        city: "City",
-        state: "state",
-        country: "country",
-        zipcode: "zipcode"
-    },
+export const createEvent = (data: CreatedEvent) => {
+    return axios.post("/api/events/", {...data, owner: localStorage.getItem("userId")},
     {
         headers: {"Content-Type": "application/json", "Authorization": "JWT " + getToken()}
     });
@@ -29,6 +18,10 @@ export const createEvent = () => {
 
 export const deleteEvent = (eventId: number) => {
     return axios.delete('/api/events/' + eventId, {headers: {"Content-Type": "application/json", "Authorization": "JWT " + getToken()}});
+}
+
+export const editEvent = (data: TEvent) => {
+    return axios.put(`/api/events/${data.id}/`, data, {headers: {"Content-Type": "application/json", "Authorization": "JWT " + getToken()}})
 }
 
 const getToken = () => {

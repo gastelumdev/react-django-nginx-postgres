@@ -9,27 +9,32 @@ import {
     Text,
     useColorModeValue,
 } from "@chakra-ui/react";
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { FcPlanner } from "react-icons/fc";
-import { TEvent } from "../features/events/eventsSlice";
-import { Link } from "react-router-dom";
+import { TEvent, getEventsAsync } from "../features/events/eventsSlice";
+import { Link, Navigate } from "react-router-dom";
+import CreateEvent from "../features/events/CreateEvent";
+import EditEvent from "../features/events/EditEvent";
+import { useAppDispatch } from "../app/hooks";
 
 interface CardProps {
-    id: number;
+    event: TEvent;
     heading: string;
     description: string;
     icon: ReactElement;
     setCard(id: number): void;
     deleteEvent(id: number): void;
+    onRerender(): void;
 }
 
 const Card = ({
-    id,
+    event,
     heading,
     description,
     icon,
     setCard,
     deleteEvent,
+    onRerender,
 }: CardProps) => {
     return (
         <Box
@@ -59,10 +64,10 @@ const Card = ({
                     </Text>
                 </Box>
                 <Link
-                    to={`/dashboard/${id}`}
+                    to={`/dashboard/${event.id}`}
                     onClick={() => {
-                        setCard(id);
-                        console.log(id);
+                        setCard(event.id);
+                        console.log(event.id);
                     }}
                     // variant={"link"}
                     // colorScheme={"blue"}
@@ -72,11 +77,12 @@ const Card = ({
                 </Link>
                 <button
                     onClick={() => {
-                        deleteEvent(id);
+                        deleteEvent(event.id);
                     }}
                 >
                     Delete
                 </button>
+                <EditEvent onRerender={onRerender} _event={event} />
             </Stack>
         </Box>
     );
@@ -88,6 +94,7 @@ interface CardWrapperProps {
     events: Array<TEvent>;
     setCard(id: number): void;
     deleteEvent(id: number): void;
+    onRerender(): void;
 }
 
 export default function CardWrapper({
@@ -96,7 +103,13 @@ export default function CardWrapper({
     events,
     setCard,
     deleteEvent,
+    onRerender,
 }: CardWrapperProps) {
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(getEventsAsync());
+    }, [dispatch]);
     return (
         <Box p={4}>
             <Stack spacing={4} as={Container} maxW={"3xl"} textAlign={"center"}>
@@ -121,8 +134,9 @@ export default function CardWrapper({
                                 icon={<Icon as={FcPlanner} w={10} h={10} />}
                                 description={event.overview}
                                 setCard={setCard}
-                                id={event.id}
+                                event={event}
                                 deleteEvent={deleteEvent}
+                                onRerender={onRerender}
                             />
                         );
                     })}

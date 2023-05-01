@@ -14,15 +14,18 @@ import {
 import NavBar from "../../components/NavBar";
 import { ChakraProvider } from "@chakra-ui/react";
 import CardWrapper from "../../components/CardWrapper";
+import CreateEvent from "./CreateEvent";
 
 const Events = () => {
     const events = useAppSelector(selectEvents);
     const eventId = useAppSelector(selectEventId);
+
     const dispatch = useAppDispatch();
+
+    const [rerender, setRerender] = useState(false);
 
     useEffect(() => {
         dispatch(getEventsAsync());
-        console.log("We fetched EventAsync");
     }, [dispatch]);
 
     const handleLogout = () => {
@@ -36,21 +39,22 @@ const Events = () => {
     const handleDeleteEvent = (eventId: number) => {
         dispatch(deleteEventAsync(eventId));
     };
-
-    const signin = () => {
-        dispatch(
-            signinAsync({ username: "ogcollabtime", password: "Coll@b#2023" })
-        );
+    const onRerender = () => {
+        dispatch(getEventsAsync());
+        setRerender(!rerender);
+        console.log(rerender);
     };
     return (
         <ChakraProvider>
             <NavBar logout={handleLogout} />
+            <CreateEvent onRerender={onRerender} />
             <CardWrapper
                 title="Events"
                 instruction="Start by creating an event or select one below."
                 events={events}
                 setCard={handleSetEventId}
                 deleteEvent={handleDeleteEvent}
+                onRerender={onRerender}
             />
         </ChakraProvider>
     );

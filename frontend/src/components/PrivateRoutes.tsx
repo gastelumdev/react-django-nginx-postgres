@@ -4,6 +4,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { Dispatch, AnyAction } from "redux";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
 import {
+    selectError,
     // getSessionAsync,
     selectSession,
     selectStatus,
@@ -14,13 +15,14 @@ const PrivateRoutes = () => {
     // const isAuthenticated = false;
     const status = useAppSelector(selectStatus);
     const isAuthenticated = useAppSelector(selectSession);
+    const error = useAppSelector(selectError);
     const userId = localStorage.getItem("userId");
-    console.log("PrivateRoute: ", isAuthenticated);
 
     if (status === "loading") {
-        console.log("Spinning!");
         return null;
     }
+
+    if (error) return <Navigate to="/login/" replace />;
 
     if (isAuthenticated || localStorage.getItem("token") !== "") {
         console.log("Private route allows access");
