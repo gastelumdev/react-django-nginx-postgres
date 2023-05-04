@@ -155,7 +155,7 @@ DJOSER = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://18.116.85.184"
+    "http://18.116.85.184:3000"
 ]
 
 SECURE_SSL_REDIRECT = True
