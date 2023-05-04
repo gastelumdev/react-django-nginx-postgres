@@ -23,11 +23,12 @@ environ.Env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env(
+    'SECRET_KEY', "t+li4q6y4(9q!p9(_-s$!qhc280wue6^5!vb#ezunmlnh47hv(")
 
 DEBUG = False
 
-ALLOWED_HOSTS = [env('PRODUCTION_HOST')]
+ALLOWED_HOSTS = [env('PRODUCTION_HOST', "18.116.85.184")]
 
 
 # Quick-start development settings - unsuitable for production
