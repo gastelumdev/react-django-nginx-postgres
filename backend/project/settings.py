@@ -20,14 +20,18 @@ env = environ.Env()
 environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+SECRET_KEY = env('SECRET_KEY')
+
+DEBUG = False
+
+ALLOWED_HOSTS = [env('PRODUCTION_HOST')]
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-n(-+d$0wl3@!h9kr7y_r1r1*4-&o*z*0&ovsbyox9@h5ghxt5%'
 
 
 # Application definition
@@ -75,7 +79,19 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'project.wsgi.application'
+
+DATABASES = {
+    'default': {
+        'ENGINE': env('DB_ENGINE'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
+    }
+}
 
 
 # Password validation
@@ -138,3 +154,21 @@ DJOSER = {
         'user_create': 'core.serializers.UserCreateSerializer'
     }
 }
+
+CORS_ALLOWED_ORIGINS = [
+    env('PRODUCTION_HOST_WITH_PORT')
+]
+
+SECURE_SSL_REDIRECT = True
+
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SECURE = True
+
+SECURE_BROWSER_XSS_FILTER = True
+
+SECURE_HSTS_SECONDS = 1
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+SECURE_HSTS_PRELOAD = True
