@@ -18,4 +18,5 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # start app
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000.wsgi", "project.wsgi:application"]
