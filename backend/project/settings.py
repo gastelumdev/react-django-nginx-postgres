@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = env(
 #     'SECRET_KEY', "t+li4q6y4(9q!p9(_-s$!qhc280wue6^5!vb#ezunmlnh47hv(")
 
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = "t+li4q6y4(9q!p9(_-s$!qhc280wue6^5!vb#ezunmlnh47hv("
 
 DEBUG = False
 
