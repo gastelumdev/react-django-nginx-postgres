@@ -68,23 +68,23 @@ interface Signin {
 // }
 
 export const signin = ({username, password}: Signin) => {
-    return axios.post("http://127.0.0.1:8000/auth/jwt/create/", {username, password}, {headers: {"Content-Type": "application/json"}});
+    return axios.post(process.env.HOST + "/auth/jwt/create/", {username, password}, {headers: {"Content-Type": "application/json"}});
 }
 
 export const register = ({username, email, password}: User) => {
-    return axios.post("http://127.0.0.1:8000/auth/users/", {username, email, password}, {headers: {"Content-Type": "application/json"} });
+    return axios.post(process.env.HOST + "/auth/users/", {username, email, password}, {headers: {"Content-Type": "application/json"} });
 }
 
 export const getUser = (token: string) => {
-    return axios.get("http://127.0.0.1:8000/auth/users/me/",  {headers: {"Authorization": "JWT " + getToken()}});
+    return axios.get(process.env.HOST + "/auth/users/me/",  {headers: {"Authorization": "JWT " + getToken()}});
 }
 
 export const getSession = () => {
-    return axios.post("http://127.0.0.1:8000/auth/jwt/verify/", {token: getToken()}, {headers: {"Content-Type": "application/json"} });
+    return axios.post(process.env.HOST + "/auth/jwt/verify/", {token: getToken()}, {headers: {"Content-Type": "application/json"} });
 }
 
 export const refreshToken = () => {
-    return axios.post("http://127.0.0.1:8000/auth/jwt/verify/", {token: getRefreshToken()}, {headers: {"Content-Type": "application/json"} })
+    return axios.post(process.env.HOST + "/auth/jwt/verify/", {token: getRefreshToken()}, {headers: {"Content-Type": "application/json"} })
 }
 
 const getToken = () => {

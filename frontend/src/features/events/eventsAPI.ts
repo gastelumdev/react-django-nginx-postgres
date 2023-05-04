@@ -10,18 +10,18 @@ export const getEvents = () => {
 }
 
 export const createEvent = (data: CreatedEvent) => {
-    return axios.post("/api/events/", {...data, owner: localStorage.getItem("userId")},
+    return axios.post(process.env.HOST + "/api/events/", {...data, owner: localStorage.getItem("userId")},
     {
         headers: {"Content-Type": "application/json", "Authorization": "JWT " + getToken()}
     });
 }
 
 export const deleteEvent = (eventId: number) => {
-    return axios.delete('/api/events/' + eventId, {headers: {"Content-Type": "application/json", "Authorization": "JWT " + getToken()}});
+    return axios.delete(process.env.HOST + "/api/events/" + eventId, {headers: {"Content-Type": "application/json", "Authorization": "JWT " + getToken()}});
 }
 
 export const editEvent = (data: TEvent) => {
-    return axios.put(`/api/events/${data.id}/`, data, {headers: {"Content-Type": "application/json", "Authorization": "JWT " + getToken()}})
+    return axios.put(`${process.env.HOST}/api/events/${data.id}/`, data, {headers: {"Content-Type": "application/json", "Authorization": "JWT " + getToken()}})
 }
 
 const getToken = () => {
