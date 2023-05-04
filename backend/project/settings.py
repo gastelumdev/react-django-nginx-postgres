@@ -14,11 +14,6 @@ from datetime import timedelta
 from pathlib import Path
 import os
 from django.core.management.utils import get_random_secret_key
-import environ
-
-
-env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,7 +26,7 @@ SECRET_KEY = "t+li4q6y4(9q!p9(_-s$!qhc280wue6^5!vb#ezunmlnh47hv("
 
 DEBUG = False
 
-ALLOWED_HOSTS = [env('PRODUCTION_HOST', "18.116.85.184")]
+ALLOWED_HOSTS = ["18.116.85.184"]
 
 
 # Quick-start development settings - unsuitable for production
@@ -88,12 +83,12 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': env('DB_ENGINE'),
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
+        'ENGINE': "django.db.backends.postgresql_psycopg2",
+        'NAME': "postgres",
+        'USER': "postgres",
+        'PASSWORD': "Coll@b#2023",
+        'HOST': "db",
+        'PORT': 5432,
     }
 }
 
@@ -160,7 +155,7 @@ DJOSER = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    env('PRODUCTION_HOST_WITH_PORT')
+    "http://18.116.85.184"
 ]
 
 SECURE_SSL_REDIRECT = True
