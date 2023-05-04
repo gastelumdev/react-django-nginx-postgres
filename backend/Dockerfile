@@ -19,4 +19,4 @@ COPY . .
 
 # start app
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-CMD ["gunicorn", "--bind", "0.0.0.0:8000.wsgi", "project.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "project.wsgi:application"]
